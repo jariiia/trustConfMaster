@@ -7,6 +7,23 @@
 # Proceedings of the twenty-third ACM SIGMOD-SIGACT-SIGART symposium on Principles of database systems. ACM, 2004.
 #
 
+def rankingToBucketOrder(ranking):
+    """
+    :param ranking: A partial ranking defined as a list of tuples. The first element of the tuple is the item in
+    the ranking, while the second element is the position of the element in the ranking. No ordering is assumed in
+    the ranking.
+    Example of partial ranking: [('a',1),('b',2),('c',1),('d',3),('e',2)]
+    :return: A bucket order.
+    """
+    maxPosition = max([position for (item,position) in ranking])
+    print "Max position:",maxPosition
+    bucketOrder = [set() for i in range(maxPosition)]
+    print "BucketOrder = ",bucketOrder
+    for (item,position) in ranking:
+        bucketOrder[position - 1].add(item)
+    print "BucketOrder = ",bucketOrder
+    return bucketOrder
+
 def getBucketPosition(bucket,bucketOrder):
     if bucket in bucketOrder:
         bucketIndex = bucketOrder.index(bucket)
@@ -140,3 +157,10 @@ if __name__ == "__main__":
 
     # Test the Kentall distance for "full" rankings (Wikipedia example)
     print kendallDistance(0.5,domain,bucketOrder5,bucketOrder6)
+
+    # Using the ranking to bucket order function
+    a = [('a',1),('b',2),('c',1),('d',3),('e',2)]
+    b = [('a',2),('b',3),('c',3),('d',3),('e',1)]
+    aBucketOrder = rankingToBucketOrder(a)
+    bBucketOrder = rankingToBucketOrder(b)
+    print kendallDistance(0.5,domain,aBucketOrder,bBucketOrder)
